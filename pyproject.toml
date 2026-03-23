@@ -1,6 +1,6 @@
 [project]
 name = "mutable-url"
-version = "0.1.1"  # will bump to 1.0.0 via trusted publishing
+version = "0.1.2"  # will bump to 1.0.0 once done with tests and CI; code is unchanging (trusted publishing is now setup)
 description = "MutableURL class for editing URLs"
 readme = "README.md"
 license = "ISC"
@@ -8,7 +8,7 @@ authors = [
   { name="Phil Pennock", email="python-pkgs@pennock-tech.com" },
 ]
 classifiers = [
-  "Development Status :: 5 - Production/Stable",  # FIXME: it's 0.1.0 but only until we switch to trusted publishing
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
   "Operating System :: OS Independent",
@@ -18,7 +18,7 @@ keywords = [
   "url", "mutability", "mutable"
 ]
 
-requires-python = ">=3.14"
+requires-python = ">=3.10"
 dependencies = []
 
 [project.urls]
@@ -34,5 +34,14 @@ dev = [
   "ruff",
   "ty",
 
-  "pytest"
+  "pytest",
+  "tox",
+  "tox-uv",
 ]
+
+[tool.ruff]
+target-version = "py310"
+
+[tool.tox]
+requires = ["tox-uv>=1.25"]
+env_list = ["py310", "py311", "py312", "py313", "py314"]

@@ -87,15 +87,14 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
 
-# This will be needed for tests, once we have tests:
-#     - name: Install the project
-#       run: uv sync --locked --all-extras --dev
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
 
       - name: Build
         run: uv build --no-sources
 
-        # TODO: tests, once we have tests
-        # Reconsider runs-on if so, beware ubuntu-slim size and run duration limits
+      - name: Test across Python versions
+        run: uv run tox
 
       - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
