@@ -11,6 +11,10 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
 
   test:
@@ -31,11 +35,6 @@ jobs:
         with:
           version: "0.10.11"
           enable-cache: true  # not a release workflow, caching is fine
-
-      - name: "Set up Python"
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version-file: "pyproject.toml"
 
       - name: Install the project
         run: uv sync --locked --all-extras --dev

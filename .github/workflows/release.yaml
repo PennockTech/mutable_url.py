@@ -16,10 +16,27 @@ on:
   workflow_dispatch:
     inputs:
       tag:
+        # The tag should still exist, but use this if some transient error means that
+        # we failed to start, or complete.
+        #
+        # If we did start and it was just a failure to upload, you should consider
+        # re-running from the failed jobs in the existing action run, instead
+        # of a new run.
         description: "The tag to release (e.g., v1.0.0)"
         required: true
 
 permissions: {}
+
+# We don't want to interrupt an existing flow, and we do (or should!) have a
+# tag protection ruleset preventing updates/deletions/force-pushes for v*
+#
+# But if something goes wrong where I want to manually create a release, we do
+# have workflow_dispatch.  For that, we don't cancel and we don't guard on a
+# release existing.  My assumption is that the draft release will have been created
+# but a transient error blocked the release (PyPI service outage or somesuch).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
 
@@ -55,7 +72,15 @@ jobs:
         run: |
           # NOTE: No quotes around PRERELEASE_FLAG so that it expands to either `--prerelease` or an empty string,
           # rather than an empty argument.
-          gh release create --repo "$GITHUB_REPOSITORY" --draft --verify-tag ${PRERELEASE_FLAG} "${RELEASE_TAG}" --title "${RELEASE_TAG}"
+          set -e  # no 'u' (even though PRERELEASE_FLAG should always exist, just usually be empty)
+          if ! gh release create --repo "$GITHUB_REPOSITORY" --draft --verify-tag ${PRERELEASE_FLAG} "${RELEASE_TAG}" --title "${RELEASE_TAG}"
+          then
+            # record some information about the already-existing release in our output
+            gh release view --json id,tagName,createdAt,isDraft,isPrerelease,isImmutable "${RELEASE_TAG}"
+            # if that fails, then it doesn't exist and we failed to create, so abort under `-set -e` is correct
+            # Now, refuse to proceed if the release is no longer draft
+            gh release view --json isDraft "${RELEASE_TAG}" | jq -er .isDraft
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ needs.plan-release.outputs.release-tag }}
