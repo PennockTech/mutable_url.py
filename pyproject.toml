@@ -1,6 +1,6 @@
 [project]
 name = "mutable-url"
-version = "0.1.0"  # will bump to 1.0.0 via trusted publishing
+version = "0.1.1"  # will bump to 1.0.0 via trusted publishing
 description = "MutableURL class for editing URLs"
 readme = "README.md"
 license = "ISC"
