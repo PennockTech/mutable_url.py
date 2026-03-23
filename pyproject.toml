@@ -1,6 +1,6 @@
 [project]
 name = "mutable-url"
-version = "1.0.0"
+version = "1.0.1"
 description = "MutableURL class for editing URLs"
 readme = "README.md"
 license = "ISC"
