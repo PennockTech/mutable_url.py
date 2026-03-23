@@ -1,6 +1,6 @@
 [project]
 name = "mutable-url"
-version = "0.1.2"  # will bump to 1.0.0 once done with tests and CI; code is unchanging (trusted publishing is now setup)
+version = "1.0.0"
 description = "MutableURL class for editing URLs"
 readme = "README.md"
 license = "ISC"
