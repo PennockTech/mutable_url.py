@@ -1,0 +1,38 @@
+[project]
+name = "mutable-url"
+version = "0.1.0"  # will bump to 1.0.0 via trusted publishing
+description = "MutableURL class for editing URLs"
+readme = "README.md"
+license = "ISC"
+authors = [
+  { name="Phil Pennock", email="python-pkgs@pennock-tech.com" },
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",  # FIXME: it's 0.1.0 but only until we switch to trusted publishing
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Internet",
+]
+keywords = [
+  "url", "mutability", "mutable"
+]
+
+requires-python = ">=3.14"
+dependencies = []
+
+[project.urls]
+repository = "https://github.com/PennockTech/mutable_url.py"
+issues = "https://github.com/PennockTech/mutable_url.py/issues"
+
+[build-system]
+requires=["uv_build<=0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+  "ruff",
+  "ty",
+
+  "pytest"
+]
