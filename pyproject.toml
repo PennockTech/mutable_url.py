@@ -26,7 +26,9 @@ repository = "https://github.com/PennockTech/mutable_url.py"
 issues = "https://github.com/PennockTech/mutable_url.py/issues"
 
 [build-system]
-requires=["uv_build<=0.11.0"]
+# uv 0.11.0 is out, nothing for us incompatible, extend range instead of forcing client upgrades
+# (although 0.11 is currently newer than our tool.uv.exclude-newer)
+requires=["uv_build>=0.10.0,<0.12"]
 build-backend = "uv_build"
 
 [dependency-groups]
@@ -45,3 +47,7 @@ target-version = "py310"
 [tool.tox]
 requires = ["tox-uv>=1.25"]
 env_list = ["py310", "py311", "py312", "py313", "py314"]
+
+[tool.uv]
+# We don't have regular dependencies, and so this affects only the dev dependencies and shouldn't affect downstream users of the library.
+exclude-newer = "3 days"
